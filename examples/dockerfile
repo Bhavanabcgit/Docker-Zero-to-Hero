@@ -1,0 +1,20 @@
+# Use a base image that contains Java
+FROM adoptopenjdk:11-jdk-hotspot
+
+# Set environment variables
+ENV MAVEN_VERSION=3.8.4
+ENV MAVEN_HOME=/opt/maven
+
+# Install Maven
+RUN wget -qO- https://downloads.apache.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | tar xz -C /opt && \
+    ln -s /opt/apache-maven-$MAVEN_VERSION $MAVEN_HOME && \
+    ln -s $MAVEN_HOME/bin/mvn /usr/local/bin/mvn
+
+# Set Maven home directory
+ENV PATH=$MAVEN_HOME/bin:$PATH
+
+# Verify Maven installation
+RUN mvn --version
+
+# Set working directory
+WORKDIR /app
